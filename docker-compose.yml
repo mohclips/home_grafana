@@ -14,19 +14,22 @@ services:
     restart: always
 #    networks:
 #      - grafana-net
+    user: '0'
     ports:
       - "3000:3000"
     volumes:
       - grafana_data:/var/lib/grafana
       - ${PWD}/grafana/config/grafana.ini:/etc/grafana/grafana.ini:ro
       - ${PWD}/grafana/logs:/var/log/grafana
+      - ${PWD}/grafana/plugins:/var/lib/grafana/plugins
       - ${PWD}/shared:/shared
     environment:
-      - GF_SERVER_ROOT_URL=https://grafana.${DOMAINNAME}
-      - GF_AUTH_BASIC_ENABLED=false
-      - GF_RENDERING_SERVER_URL=http://renderer:8081/render
-      - GF_RENDERING_CALLBACK_URL=http://grafana:3000/
-      - GF_LOG_FILTERS=rendering:debug
+      GF_SERVER_ROOT_URL: http://grafana.homelan.local:3000
+      GF_AUTH_BASIC_ENABLED: "false"
+      GF_RENDERING_SERVER_URL: http://renderer:8081/render
+      GF_RENDERING_CALLBACK_URL: http://grafana:3000/
+      GF_LOG_FILTERS: rendering:debug
+      #GF_INSTALL_PLUGINS: "grafana-clock-panel, sunandmoon"
 
     healthcheck:
       test:
